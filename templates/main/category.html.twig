@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+ {% block body %}}
+     <div class="category">
+         <div class="row catInfo"style="margin-left: 50%;font-size: 2em;">
+             {{ category.name }}
+         </div>
+         <div class="row catInfo" style="margin: 25px 15px; border: 4px solid #e0e0e0; border-radius: 10px ">
+             {{ category.descr }}
+         </div>
+         <style>
+             div.category{
+                 font: 700 1em/1 "Oswald", sans-serif;
+                 color: #f1e3cc;
+                 text-shadow:
+                         0 0 5px #3d342c,
+                         0 0 10px #50483d,
+                         0 0 20px #504b3f,
+                         0 0 40px #4b453c,
+                         0 0 80px #544e47,
+                         0 0 90px #463f36,
+                         0 0 100px #e0850e,
+                         0 0 150px #8a4c05;
+             }
+         </style>
+         <div class="row catInfo">
+             <div class="col-8"></div>
+             <div class="col-2">
+                <span>Количество отображаемого оружия: </span>
+             </div>
+             <div class="col-2">
+                 <select name="pageSize" id="pageSizeId">
+                     <option value="2" {% if pageSize == 2 %} selected {% endif %}>2 единицы</option>
+                     <option value="4" {% if pageSize == 4 %} selected {% endif %}>4 единицы</option>
+                     <option value="8" {% if pageSize == 8 %} selected {% endif %}>8 единицы</option>
+                 </select>
+                 <script>
+                     let selectPageSize = document.getElementById('pageSizeId');
+                     selectPageSize.addEventListener('change', () => {
+                         let pageSize = selectPageSize.value;
+                         window.location.href = "{{ url('category') }}" + '?id=' + {{ category.id }} + '&pageSize=' + pageSize + '&page=' + {{ page }};
+                     });
+
+                     function myFunc(elem){
+                         var pageSizeId = document.getElementById('pageSizeId');
+                         var countSelected = 0;
+                         //Считаем
+                         for (var i = 0; i < pageSizeId.options.length; i++){
+                             if (pageSizeId.options[i].selected)
+                                 countSelected++;
+                         }
+                         if (countSelected > 3){//Отменяем последнее выделение
+                             elem.selected = false;
+                             alert('Больше выбирать нельзя');
+                         }
+                     }
+                 </script>
+             </div>
+         </div>
+         <div class="row custom_class">
+         {% for weapon in weapons  %}
+             <div class="col-6" style="padding: 2em"; >
+                 {#        <a href="{{ url('weapon', {'id': weapon.id}) }}">#}
+                 <a href="{{ url('weapon', {'id': weapon.id}) }}">
+                     {%  if weapon.getImage %}
+                         <img src="{{ weapon.getImage }}"width="600"height="400">
+                     {% endif %}
+                     <div class="h5">{{ weapon.brand.name }}</div>
+                     <div class="h5" style=" text-transform: uppercase;">{{ weapon.name }}</div>
+                     <style>
+                         div.h5 {
+                             text-decoration: none;
+                             ;
+                             color: #f3ebeb;
+                             padding: 0px 15px;
+                             font-family: arial;
+                             border-bottom: 0px solid #f88c00;
+                             margin-inline: 20em;
+                         }
+                     </style>
+
+                 </a>
+             </div>
+         {% endfor %}
+         </div>
+
+         <div id="pagination" class="row text-center">
+             <div class="col-2"></div>
+             <div class="col-8">
+                 <a id="a_pagination" href="{{ url('category', { 'page': 1, 'pageSize':  pageSize, 'id': category.id }) }}"><<</a>
+                 <a id="a_pagination" href="{{ url('category', { 'page': page - 1, 'pageSize':  pageSize, 'id': category.id }) }}"><</a>
+                 {% for pageNumber in pageNumbers %}
+                     <a id="a_pagination" href="{{ url('category', { 'page': pageNumber, 'pageSize': pageSize, 'id': category.id }) }}">{{ pageNumber }}</a>
+                 {% endfor %}
+                 {% if (page + 1) <= totalPageSize %}
+                     <a id="a_pagination" href="{{ url('category', { 'page': page + 1, 'pageSize':  pageSize, 'id': category.id }) }}">></a>
+                 {% endif %}
+                 <a id="a_pagination" href="{{ url('category', { 'page': totalPageSize, 'pageSize':  pageSize, 'id': category.id }) }}">>></a>
+             </div>
+             <div class="col-2"></div>
+         </div>
+     </div>
+ {% endblock %}

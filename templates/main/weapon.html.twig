@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+ {% block stylesheets %}
+
+ {% endblock %}
+{% block body %}
+<div class="spec row" style="margin: 1em" >
+  <div class="col-6">
+      <div class="itcss">
+          <div class="itcss__wrapper">
+              <div class="itcss__items">
+                      {% for image in weapon.getImages %}
+                          <div class="itcss__item">
+                              <img src="{{ image }}" alt="{{ weapon.getName }}" width="600px" height="350px"  />
+                          </div>
+                      {% endfor %}
+              </div>
+          </div>
+          <button class="itcss__btn itcss__btn_prev" role="button" data-slide="prev"></button>
+          <button class="itcss__btn itcss__btn_next" role="button" data-slide="next"></button>
+      </div>
+      <script>
+          document.addEventListener('DOMContentLoaded', () => {
+              new ItcSimpleSlider('.itcss', {
+                  loop: true,
+                  autoplay: false,
+                  swipe: true
+              });
+          });
+      </script>
+      </script>
+
+    </div>
+   <div class="col-6"
+    {% if spec %}
+    <div>
+        <div class="h3" style="margin: 1em;padding-top: 1em;color: #f5f2f2;">ХАРАКТЕРИСТИКИ</div>
+        {% if spec.getRpm() %}
+            <div class="tech1">
+                <span>Скорострельность: </span>
+                <span>{{ spec.getRpm() }}</span>
+            </div>
+        {% endif %}
+        {% if spec.getWeight() %}
+            <div class="tech2">
+                <span>Вес: </span>
+                <span>{{ spec.getWeight() }}</span>
+            </div>
+        {% endif %}
+        {% if spec.getLength() %}
+            <div class="tech3">
+                <span>Длина: </span>
+                <span>{{ spec.getLength() }}</span>
+            </div>
+        {% endif %}
+    </div>
+    </div>
+{% endif %}
+     <div class="row WeaponInfo" style="margin: 25px 15px; border: 2px solid #e0e0e0; border-radius: 10px ">
+        {{ weapon.descr }}
+     </div>
+</div>
+{% endblock %}
