@@ -93,6 +93,10 @@ class AllWeaponsController extends BaseController
         }
         return $this->render('404.html.twig');
     }
+
+    public function newMethod() {
+       return null;
+    }
 }
 
 
